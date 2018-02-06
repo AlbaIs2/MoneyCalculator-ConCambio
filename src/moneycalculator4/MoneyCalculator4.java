@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class MoneyCalculator4 {
@@ -16,15 +14,16 @@ public static void main(String[] args) throws Exception{
         moneyCalculator.execute();        
     }
     
-     private Money money;
+    private Money money;
     private ExchangeRate exchangeRate;
     private Currency currencyTo;
-    Map <String,Currency> currency = new HashMap<>();
-
+    private final CurrencyList currencyList = new CurrencyList();
+    
     public MoneyCalculator4() {
-        currency.put("Euro", new Currency("EUR","euro","€"));
-        currency.put("Dolar", new Currency("USD","dolar","$"));
-        currency.put("Libra", new Currency("GBP","libra esterlina","£"));
+        currencyList.add(new Currency("EUR","Euro","€"));
+        currencyList.add(new Currency("USD","Dolar","$"));
+        currencyList.add(new Currency("GBP","Libra","£"));
+      
     }
     
     
@@ -41,12 +40,12 @@ public static void main(String[] args) throws Exception{
         Double amount = Double.parseDouble(scanner.next());
         
         System.out.println("Introduzca divisa origen");
-        Currency currencys = currency.get(scanner.next());
+        Currency currencys = currencyList.get(scanner.next());
         
         money = new Money(amount,currencys);
         
         System.out.println("Introduzca divisa destino");
-        currencyTo = currency.get(scanner.next());
+        currencyTo = currencyList.get(scanner.next());
     }
     
     private void process() throws Exception{
@@ -67,6 +66,7 @@ public static void main(String[] args) throws Exception{
             line = line.substring(line.indexOf(to.getCode())+5, line.indexOf("}"));
             return new ExchangeRate(from,to,new Date(),Double.parseDouble(line));
         }
+    
     }
     
 }
