@@ -15,11 +15,12 @@ public static void main(String[] args) throws Exception{
         moneyCalculator.execute();        
     }
     
-    private Double amount;
+    private Money money;
     private Double exchangeRate;
     private Currency currencyFrom;
     private Currency currencyTo;
     Map <String,Currency> currency = new HashMap<>();
+
 
     public MoneyCalculator4() {
         currency.put("Euro", new Currency("EUR","euro","€"));
@@ -38,21 +39,23 @@ public static void main(String[] args) throws Exception{
     private void input(){
         System.out.println("Introduzca cantidad");
         Scanner scanner = new Scanner(System.in);
-        amount = Double.parseDouble(scanner.next());
+        Double amount = Double.parseDouble(scanner.next());
         
         System.out.println("Introduzca divisa origen");
-        currencyFrom = currency.get(scanner.next());
+        Currency currencys = currency.get(scanner.next());
+        
+        money = new Money(amount,currencys);
         
         System.out.println("Introduzca divisa destino");
         currencyTo = currency.get(scanner.next());
     }
     
     private void process() throws Exception{
-        exchangeRate = getExchangeRate(currencyFrom.getCode(), currencyTo.getCode());
+        exchangeRate = getExchangeRate(money.getCurrency().getCode(), currencyTo.getCode());
     }
     
     private void output(){
-        System.out.println(amount + " " + currencyFrom.getSymbol() + " equivalen a " + amount * exchangeRate + currencyTo.getSymbol());
+        System.out.println(money.getAmount() + " " + money.getCurrency().getSymbol() + " equivalen a " + money.getAmount() * exchangeRate + currencyTo.getSymbol());
     }
     
     private static double getExchangeRate(String form, String to) throws Exception{
